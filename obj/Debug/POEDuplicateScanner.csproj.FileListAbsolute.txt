@@ -21,3 +21,4 @@ C:\Projz\EPI\PathOfExileStashSorter-master\PathOfExileStashSorter-master\Source\
 C:\Projz\EPI\PathOfExileStashSorter-master\PathOfExileStashSorter-master\Source\POEStashSorter\POEDuplicateScanner\bin\Debug\protobuf-net.xml
 C:\Projz\EPI\PathOfExileStashSorter-master\PathOfExileStashSorter-master\Source\POEStashSorter\POEDuplicateScanner\obj\Debug\POEDuplicateScanner.exe
 C:\Projz\EPI\PathOfExileStashSorter-master\PathOfExileStashSorter-master\Source\POEStashSorter\POEDuplicateScanner\obj\Debug\POEDuplicateScanner.pdb
+C:\Projz\EPI\PathOfExileStashSorter-master\PathOfExileStashSorter-master\Source\POEStashSorter\POEDuplicateScanner\bin\Debug\mockquadtab.json

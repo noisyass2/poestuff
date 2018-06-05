@@ -4,14 +4,16 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="127*"/>
-            <RowDefinition Height="193*"/>
+            <RowDefinition Height="127"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Button Content="Login" HorizontalAlignment="Left" Margin="32,29,0,0" VerticalAlignment="Top" Width="127" Click="Login_Click"/>
         <Button Content="Get Leagues" HorizontalAlignment="Left" Margin="32,56,0,0" VerticalAlignment="Top" Width="127" Click="Get_Leagues_Click"/>
         <Button Content="Check Duplicates" HorizontalAlignment="Left" Margin="32,111,0,0" VerticalAlignment="Top" Width="127" Click="CheckDuplicates_Click" Grid.RowSpan="2"/>
         <ComboBox x:Name="ddlLeagues" HorizontalAlignment="Left" Margin="32,83,0,0" VerticalAlignment="Top" Width="127"/>
-        <TextBox x:Name="txtDups" HorizontalAlignment="Left" Height="162" Margin="32,21,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="464"/>
+        <TextBox x:Name="txtDups" HorizontalAlignment="Left" Margin="32,21,0,10" Grid.Row="1" TextWrapping="Wrap" Text="TextBox" Width="464"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="399,51,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="399,78,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
 
     </Grid>
 </Window>

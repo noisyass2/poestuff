@@ -1,7 +1,10 @@
-﻿using POEDuplicateScanner.Helpers;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using POEDuplicateScanner.Helpers;
 using POEStashSorterModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +28,7 @@ namespace POEDuplicateScanner
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
@@ -86,5 +90,26 @@ namespace POEDuplicateScanner
             public int y { get; set; }
             public string tab { get; set; }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+            TabManager tmgr = new TabManager();
+            
+
+
+            txtDups.Text = tmgr.GetRunDown(2);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+            TabManager tmgr = new TabManager();
+            tmgr.AcquireChaosSet(2);
+            
+        }
+
+        
+        
     }
 }
