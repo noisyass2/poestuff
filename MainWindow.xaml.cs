@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using POEDuplicateScanner.Helpers;
+﻿using POEDuplicateScanner.Helpers;
 using POEStashSorterModels;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,23 +22,39 @@ namespace POEDuplicateScanner
     /// </summary>
     public partial class MainWindow : Window
     {
+        TabManager tmgr = new TabManager();
+
         public MainWindow()
         {
             InitializeComponent();
-            
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            var sessid = "";
-            POEConnect.Login(sessid);
-        }
+            
+            txtDups.Text = "Logging in" + Environment.NewLine;
+            var sessid = txtSession.Text;
+            POEConnect.Login(sessid,txtUname.Text);
+            txtDups.Text += "Done" + Environment.NewLine;
+            txtDups.Text += "---------------" + Environment.NewLine;
 
-        private void Get_Leagues_Click(object sender, RoutedEventArgs e)
-        {
+            txtDups.Text += "Getting Characters and Leagues" + Environment.NewLine;
             var leagues = POEConnect.GetLeagues();
             ddlLeagues.ItemsSource = leagues;
+            ddlLeagues.SelectedItem = leagues.First();
+            tmgr.SetLeague(leagues.First());
+            txtDups.Text += "Done" + Environment.NewLine;
+            txtDups.Text += "---------------" + Environment.NewLine;
+
+            txtDups.Text += "Getting Tabs" + Environment.NewLine;
+            tmgr.InitTabs();
+            ddlLeagues_Copy.ItemsSource = tmgr.CurrentStash.tabs;
+            ddlLeagues_Copy.SelectedItem = tmgr.CurrentStash.tabs.First();
+            txtDups.Text += "Done" + Environment.NewLine;
+            txtDups.Text += "---------------" + Environment.NewLine;
+
         }
+
 
         private void CheckDuplicates_Click(object sender, RoutedEventArgs e)
         {
@@ -50,17 +63,21 @@ namespace POEDuplicateScanner
             var allitems = new List<SimpleItem>();
             // get stashes
             var tabs = POEConnect.GetTabs(league);
+
+            
             foreach (var tab in tabs)
             {
+                
                 // simplify all items in one list
-                foreach (var item in tab.Items)
+                var fulltab = POEConnect.GetItems(tab.Index, league);
+                foreach (var item in fulltab.Items)
                 {
                     allitems.Add(new SimpleItem()
                     {
                         Name = item.Name,
                         x = item.X,
                         y = item.Y,
-                        tab = tab.Name
+                        tab = fulltab.Name
                     });
                 }
             }
@@ -93,23 +110,32 @@ namespace POEDuplicateScanner
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
-            TabManager tmgr = new TabManager();
-            
+            var league = (League)ddlLeagues.SelectedItem;
+            var tab = (CustomTab)ddlLeagues_Copy.SelectedItem;
 
+            tmgr.SetLeague(league);
+            tmgr.SetCurrentTab(tab);
 
-            txtDups.Text = tmgr.GetRunDown(2);
+            txtDups.Text = tmgr.GetRunDown();
+            tmgr.SaveTab(tab.Index);
+            tmgr.CurrentTab = tab;
+
+            //Clipboard.SetText(txtDups.Text);
+            ApplicationHelper.OpenPathOfExile();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-
-            TabManager tmgr = new TabManager();
-            tmgr.AcquireChaosSet(2);
+            
+            tmgr.AcquireChaosSet(tmgr.CurrentTab);
             
         }
 
-        
-        
+        private void ddlLeagues_Copy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var tab = (CustomTab)ddlLeagues_Copy.SelectedItem;
+            tmgr.CurrentTab = tab;
+            txtDups.Text += "Current tab changed to :" + tmgr.CurrentTab.ToString();
+        }
     }
 }

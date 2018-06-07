@@ -92,9 +92,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="mockquadtab.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -106,7 +103,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PoeStashSorterModels\PoeStashSorterModels.csproj">
+    <ProjectReference Include="C:\Users\user\Documents\My Games\Path of Exile\PathOfExileStashSorter-master\PathOfExileStashSorter-master\Source\PoeStashSorterModels\PoeStashSorterModels.csproj">
       <Project>{fee9ad02-ce05-4012-b9f1-163dd33dd9ce}</Project>
       <Name>PoeStashSorterModels</Name>
     </ProjectReference>
