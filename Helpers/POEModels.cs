@@ -38,7 +38,7 @@ namespace POEDuplicateScanner.Helpers
         public List<CustomItem> GetItems(CustomSubType subtype,int cnt)
         {
             // get first item with subtype
-            return this.Items.Where(p => p.SubType == subtype).Take(cnt).ToList();
+            return this.Items.Where(p => p.SubType == subtype).OrderBy(p => p.X).Take(cnt).ToList();
         }
 
         public CustomItem GetItem(Hand hand)
@@ -152,7 +152,7 @@ namespace POEDuplicateScanner.Helpers
         accessories,
         armour,
         jewels,
-        currency, maps, gems, cards, flasks,
+        currency, maps, gems, card, flasks,
         others
     }
 

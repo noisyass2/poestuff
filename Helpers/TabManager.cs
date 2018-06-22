@@ -53,6 +53,17 @@ namespace POEDuplicateScanner.Helpers
 
             result += Environment.NewLine + "-----------" + Environment.NewLine;
 
+            // Low ones
+            result += "RUNNING LOW:";
+            var qryOrder = qry.OrderBy(s => s.Count()).Take(5);
+            foreach (var stype in qryOrder)
+            {
+                
+                result +=  stype.Key.ToString().ToUpper() + ":" + stype.Count() + ", ";
+            }
+            result += Environment.NewLine + "-----------" + Environment.NewLine;
+
+
             //get weapons by hand
             var ohWeapons = tab.Items.Where(p => p.MainType == CustomItemType.weapons).GroupBy(p => p.Hand);
 
@@ -84,6 +95,37 @@ namespace POEDuplicateScanner.Helpers
             //result += "Quality > 10" + Environment.NewLine;
             //result += tab.Items.Where(p => p.Properties != null && p.Properties.Exists(pi => pi.Name == "Quality")).Count();
             //result += Environment.NewLine + "-----------" + Environment.NewLine;
+
+            
+
+            return result;
+        }
+
+        public String GetQuickRundown()
+        {
+            var tab = CurrentTab;
+            // Mock
+            //var tab = POEConnect.GetMockTab(tabIndex, this.League);
+            // get all items in tab.
+            string result = "";
+
+            var qry = tab.Items.Where(p => p.SubType != CustomSubType.shield && p.SubType != CustomSubType.quiver && 
+            (p.MainType == CustomItemType.accessories || p.MainType == CustomItemType.armour)).GroupBy(p => p.SubType).OrderBy(p => p.Count());
+
+            foreach (var stype in qry)
+            {
+                result += stype.Key.ToString().Substring(0, 2) + ":" + stype.Count() + " ";
+            }
+
+            result += "|";
+
+            var qryWeapons = tab.Items.Where(p => p.MainType == CustomItemType.weapons).GroupBy(p => p.Hand).OrderBy(p => p.Count());
+            foreach (var stype in qryWeapons)
+            {
+                result += stype.Key.ToString().Substring(0, 1).ToUpper() + ":" + stype.Count() + " ";
+            }
+
+            result += "---";
 
             return result;
         }
@@ -147,7 +189,7 @@ namespace POEDuplicateScanner.Helpers
         {
             ApplicationHelper.OpenPathOfExile();
 
-            var cellHeight = 26;
+            var cellHeight = 26.5f;
             var startX = 15;
             var startY = 160;
 
@@ -155,11 +197,14 @@ namespace POEDuplicateScanner.Helpers
             var offsetY = cellHeight / 2;
             foreach (var item in chaosSet)
             {
-                var itemVector = new Vector2((item.X * cellHeight) + startX + offsetX, (item.Y * cellHeight) + startY + offsetY);
-                MouseTools.MoveCursor(MouseTools.GetMousePosition(), itemVector);
-                Thread.Sleep(200);
-                MouseTools.MouseClickEvent();
-                Console.WriteLine(itemVector.X + ", " + itemVector.Y);
+                if(item != null) {
+
+                    var itemVector = new Vector2((item.X * cellHeight) + startX + offsetX, (item.Y * cellHeight) + startY + offsetY);
+                    MouseTools.MoveCursor(MouseTools.GetMousePosition(), itemVector);
+                    Thread.Sleep(200);
+                    MouseTools.MouseClickEvent();
+                    Console.WriteLine(itemVector.X + ", " + itemVector.Y);
+                }
             }
         }
 

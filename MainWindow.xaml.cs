@@ -1,7 +1,9 @@
-﻿using POEDuplicateScanner.Helpers;
+﻿using Newtonsoft.Json;
+using POEDuplicateScanner.Helpers;
 using POEStashSorterModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,7 @@ namespace POEDuplicateScanner
     public partial class MainWindow : Window
     {
         TabManager tmgr = new TabManager();
+        private bool isMinimized;
 
         public MainWindow()
         {
@@ -31,7 +34,12 @@ namespace POEDuplicateScanner
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            
+
+            Login lastLogin = new Login() { SessionID = txtSession.Text, Uname = txtUname.Text };
+
+
+            File.WriteAllText("lastLogin.txt", JsonConvert.SerializeObject(lastLogin));
+
             txtDups.Text = "Logging in" + Environment.NewLine;
             var sessid = txtSession.Text;
             POEConnect.Login(sessid,txtUname.Text);
@@ -52,6 +60,15 @@ namespace POEDuplicateScanner
             ddlLeagues_Copy.SelectedItem = tmgr.CurrentStash.tabs.First();
             txtDups.Text += "Done" + Environment.NewLine;
             txtDups.Text += "---------------" + Environment.NewLine;
+
+
+            this.Hide();
+
+            QuickyWindow quickyWindow = new QuickyWindow();
+            quickyWindow.TabManager = this.tmgr;
+            quickyWindow.League = leagues.First();
+            quickyWindow.InitTabs();
+            quickyWindow.ShowDialog();
 
         }
 
@@ -99,6 +116,12 @@ namespace POEDuplicateScanner
             }
         }
 
+        class Login
+        {
+            public string SessionID { get; set; }
+            public string Uname { get; set; }
+
+        }
 
         class SimpleItem
         {
@@ -136,6 +159,31 @@ namespace POEDuplicateScanner
             var tab = (CustomTab)ddlLeagues_Copy.SelectedItem;
             tmgr.CurrentTab = tab;
             txtDups.Text += "Current tab changed to :" + tmgr.CurrentTab.ToString();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            if(!isMinimized)
+            {
+                this.Height = 50;
+                this.Width = 50;
+            }
+            else
+            {
+                this.Height = 450;
+                this.Width = 350;
+            }
+            this.isMinimized = !this.isMinimized;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(File.Exists("lastlogin.txt"))
+            {
+                Login lastLogin = JsonConvert.DeserializeObject<Login>(File.ReadAllText("lastlogin.txt"));
+                txtSession.Text = lastLogin.SessionID;
+                txtUname.Text = lastLogin.Uname;
+            }
         }
     }
 }
